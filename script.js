@@ -498,10 +498,10 @@ function finishExam() {
 }
 
 // =============================================
-// GENERADOR DE PDF (jsPDF - Estilo WPS)
+// GENERADOR DE PDF (jsPDF - Estilo Institucional)
 // =============================================
 function generarPDF(pdfFilename) {
-  const jsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+  const { jsPDF } = window.jspdf;
   if (!jsPDF) throw new Error('jsPDF no cargado');
   const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
 
@@ -522,31 +522,29 @@ function generarPDF(pdfFilename) {
     redText:    [114, 28, 36],
   };
 
-  function v(id) {
+  const v = (id) => {
     const el = document.getElementById(id);
     return (el && el.value) ? el.value : '---';
-  }
+  };
 
-  function drawRow(fields, rowH) {
-    rowH = rowH || 10;
+  function drawRow(fields, rowH = 10) {
     const n = fields.length;
     const colW = CW / n;
     fields.forEach(function(field, i) {
       const label = field[0], value = field[1];
       const x = M + i * colW;
-      const labelH = 3.5;
       doc.setFillColor(...C.labelBg);
-      doc.rect(x, y, colW, labelH, 'F');
+      doc.rect(x, y, colW, 4, 'F');
       doc.setTextColor(...C.textMid);
-      doc.setFontSize(6.5);
+      doc.setFontSize(7);
       doc.setFont('helvetica', 'bold');
-      doc.text(String(label), x + 1.5, y + 2.6, { maxWidth: colW - 3 });
+      doc.text(label, x + 2, y + 3);
       doc.setFillColor(...C.white);
-      doc.rect(x, y + labelH, colW, rowH - labelH, 'F');
+      doc.rect(x, y + 4, colW, rowH - 4, 'F');
       doc.setTextColor(...C.textDark);
-      doc.setFontSize(8);
+      doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
-      doc.text(String(value || '\u2014'), x + 1.5, y + labelH + (rowH - labelH) / 2 + 1.2, { maxWidth: colW - 3 });
+      doc.text(String(value), x + 2, y + 8);
       doc.setDrawColor(...C.grayBorder);
       doc.rect(x, y, colW, rowH, 'S');
     });
@@ -555,61 +553,35 @@ function generarPDF(pdfFilename) {
 
   // CABECERA
   doc.setFillColor(...C.blueDark);
-  doc.rect(M, y, CW, 18, 'F');
+  doc.rect(M, y, CW, 15, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('EJERCICIOS Y ACTIVIDADES INTERACTIVAS', PW / 2, y + 8, { align: 'center' });
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  doc.text('REPORTE DE EVALUACIÓN AUTOMÁTICO', PW / 2, y + 13, { align: 'center' });
-  y += 18;
-
-  doc.setFillColor(...C.blueLight);
-  doc.rect(M, y, CW, 7, 'F');
-  doc.setTextColor(...C.blueDark);
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'bold');
-  doc.text('IDENTIFICACIÓN DE TIPOS DE UNIÓN (ISO 17659)', PW / 2, y + 4.8, { align: 'center' });
-  y += 12;
+  doc.text('REPORTE DE EVALUACIÓN INTERACTIVA', PW / 2, y + 9, { align: 'center' });
+  y += 20;
 
   // DATOS GENERALES
-  drawRow([
-    ['Alumno/a', v('studentName')],
-    ['Curso', v('studentCourse')],
-    ['Fecha', v('examDate')],
-  ]);
-  drawRow([
-    ['Módulo', v('studentModule')],
-    ['ID Ejercicio', '3D-UNION-ISO-17659'],
-    ['Sistema', 'Interactive 3D Engine'],
-  ]);
+  drawRow([['Nombre Alumno/a', v('studentName')], ['Curso', v('studentCourse')]]);
+  drawRow([['Módulo', v('studentModule')], ['Fecha', v('examDate')]]);
   y += 10;
 
   // RESULTADO
-  doc.setTextColor(...C.blueDark);
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'bold');
-  doc.text('CALIFICACIÓN FINAL DE LA ACTIVIDAD', M, y);
-  y += 4;
-
   const notaText = document.getElementById('scoreCircle').textContent.trim();
   const notaNum = parseFloat(notaText);
   const aprobado = notaNum >= 5;
   const scoreBg   = aprobado ? C.greenBg   : C.redBg;
   const scoreFg   = aprobado ? C.greenText : C.redText;
-  const scoreLabel = aprobado ? 'APTO / PRUEBA SUPERADA' : 'NO APTO / REQUIERE REFUERZO';
 
   doc.setFillColor(...scoreBg);
-  doc.roundedRect(M, y, CW, 28, 3, 3, 'F');
+  doc.roundedRect(M, y, CW, 25, 3, 3, 'F');
   doc.setDrawColor(...scoreFg);
-  doc.roundedRect(M, y, CW, 28, 3, 3, 'S');
+  doc.roundedRect(M, y, CW, 25, 3, 3, 'S');
   doc.setTextColor(...scoreFg);
-  doc.setFontSize(28);
+  doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
-  doc.text(notaText + ' / 10', PW / 2, y + 15, { align: 'center' });
+  doc.text('NOTA FINAL: ' + notaText + ' / 10', PW / 2, y + 14, { align: 'center' });
   doc.setFontSize(10);
-  doc.text(scoreLabel, PW / 2, y + 23, { align: 'center' });
+  doc.text(aprobado ? 'RESULTADO: APTO' : 'RESULTADO: NO APTO / REQUIERE REFUERZO', PW / 2, y + 21, { align: 'center' });
   y += 35;
 
   // PIE
@@ -617,11 +589,8 @@ function generarPDF(pdfFilename) {
   doc.line(M, PH - 15, PW - M, PH - 15);
   doc.setTextColor(...C.textMid);
   doc.setFontSize(7);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Documento generado digitalmente por el Sistema Interactivo de Evaluación.', PW / 2, PH - 10, { align: 'center' });
-  doc.text('ID Archivo: ' + pdfFilename, M, PH - 10);
+  doc.text('Documento generado automáticamente por el Sistema Interactivo de Evaluación.', PW / 2, PH - 10, { align: 'center' });
 
-  // Conversión a Base64
   const ab = doc.output('arraybuffer');
   const uint8 = new Uint8Array(ab);
   let binary = '';
@@ -634,45 +603,32 @@ function generarPDF(pdfFilename) {
   };
 }
 
-// ==========================================
+// =============================================
 // ENVÍO AL EXCEL (GOOGLE APPS SCRIPT)
-// ==========================================
+// =============================================
 document.getElementById('btnEnviarDrive').addEventListener('click', async () => {
   const btn = document.getElementById('btnEnviarDrive');
   const status = document.getElementById('enviarDriveStatus');
   
   btn.disabled = true;
-  btn.textContent = 'Preparando...';
+  btn.textContent = 'Enviando...';
   status.style.display = 'block';
   status.style.color = '#555';
-  status.textContent = '⏳ Generando PDF...';
+  status.textContent = '⏳ Generando documento y guardando nota...';
 
-  // 1. CONGELAR VISUALMENTE PARA EVITAR CAMBIOS
+  // Congelar formulario
   document.querySelector('.app-container').style.pointerEvents = 'none';
   document.querySelector('.app-container').style.opacity = '0.7';
   document.getElementById('evaluationPanel').style.pointerEvents = 'auto'; 
 
   try {
-    const nombreAlumno = (document.getElementById('studentName').value || 'alumno').trim().replace(/\s+/g, '_');
-    const pdfFilename = `Union3D_${nombreAlumno}.pdf`;
+    const nombre = (document.getElementById('studentName').value || 'alumno').trim().replace(/\s+/g, '_');
+    const pdfFilename = `Union3D_${nombre}.pdf`;
     
-    // 2. GENERAR PDF
-    let pdfBlob = null;
-    let pdfBase64 = null;
-    try {
-      const pdfResult = generarPDF(pdfFilename);
-      pdfBlob = pdfResult.blob;
-      pdfBase64 = pdfResult.base64;
-      status.textContent = '✔ PDF generado correctamente.';
-    } catch (pdfErr) {
-      console.warn('Error PDF:', pdfErr);
-      status.textContent = '⚠️ PDF no generado, enviando solo nota...';
-    }
+    // 1. GENERAR PDF
+    const pdfResult = generarPDF(pdfFilename);
 
-    // 3. ENVIAR A GOOGLE APPS SCRIPT
-    status.textContent = '⏳ Enviando a Google Drive...';
-    btn.textContent = 'Enviando...';
-
+    // 2. ENVIAR A GOOGLE DRIVE
     await fetch(GAS_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -680,36 +636,32 @@ document.getElementById('btnEnviarDrive').addEventListener('click', async () => 
       body: JSON.stringify({
         fecha: document.getElementById('examDate').value,
         nombre: document.getElementById('studentName').value,
-        ejercicio: "3D: Tipos de Unión (" + document.getElementById('studentModule').value + ")",
+        ejercicio: "UNION3D - Tipos de Unión",
         nota: document.getElementById('scoreCircle').textContent,
         pdfNombre: pdfFilename,
-        pdf: pdfBase64
+        pdf: pdfResult.base64
       })
     });
     
-    // 4. DESCARGA LOCAL PARA EL ALUMNO
-    if (pdfBlob) {
-      const url = URL.createObjectURL(pdfBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = pdfFilename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      status.textContent = '✅ Puntos y PDF guardados. PDF descargado.';
-    } else {
-      status.textContent = '✅ Puntos guardados correctamente.';
-    }
+    // 3. DESCARGA LOCAL PARA EL ALUMNO
+    const url = URL.createObjectURL(pdfResult.blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = pdfFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 
     btn.textContent = '¡Enviado!';
     status.style.color = '#16a34a';
+    status.textContent = '✅ Datos guardados y PDF generado correctamente.';
 
   } catch (err) {
     console.error("Error", err);
     btn.disabled = false;
-    btn.textContent = 'Enviar a Google Drive';
+    btn.textContent = 'Reintentar envío';
     status.style.color = '#dc2626';
-    status.textContent = '❌ Hubo un error de conexión.';
+    status.textContent = '❌ Error al enviar.';
   }
 });
