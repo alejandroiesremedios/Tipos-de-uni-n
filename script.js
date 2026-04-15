@@ -1,11 +1,11 @@
 // CONFIGURACIONES GLOBALES
-const GAS_URL = "https://script.google.com/a/macros/iesremedios.es/s/AKfycbxkAcI4NpM1m1rH9YUhNUHUNmt5x9WhPN7q51WeAecqGG4-QkY6_isCqROfoWQjbo3E/exec"; 
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxdSLiKANAcFmqFAwqYjppl0O5VBtmMuczwO_RUEoRnoXVEn9MRkUWpc32L5ooT7eGZ/exec"; 
 
 // Materiales 3D (Textura metálica mejorada con corrección de profundidad para las líneas)
 const metalMat = new THREE.MeshStandardMaterial({ 
   color: 0x8a9ba8, // Tono acero
   metalness: 0.9,  // Muy metálico
-  roughness: 0.3,  // Ligeramente pulido
+  roughness: 0.2,  // Acero pulido
   polygonOffset: true,
   polygonOffsetFactor: 1, // Empuja las caras sólidas hacia atrás
   polygonOffsetUnits: 2   // Asegura que el borde neón siempre gane
@@ -55,8 +55,8 @@ const jointData = {
       }
     ],
     build: (group) => {
-      group.add(createPlate(100, 10, 250, -50.1, 0, 0));
-      group.add(createPlate(100, 10, 250, 50.1, 0, 0));
+      group.add(createPlate(80, 10, 250, -40.1, 0, 0));
+      group.add(createPlate(80, 10, 250, 40.1, 0, 0));
     }
   },
   t: {
@@ -81,8 +81,8 @@ const jointData = {
       }
     ],
     build: (group) => {
-      group.add(createPlate(200, 10, 250, 0, 0, 0)); 
-      group.add(createPlate(10, 100, 250, 0, 55, 0)); 
+      group.add(createPlate(160, 10, 250, 0, 0, 0)); 
+      group.add(createPlate(10, 80, 250, 0, 45, 0)); 
     }
   },
   solape: {
@@ -106,8 +106,8 @@ const jointData = {
       }
     ],
     build: (group) => {
-      group.add(createPlate(120, 10, 250, -40, 0, 0)); 
-      group.add(createPlate(120, 10, 250, 40, 10, 0)); 
+      group.add(createPlate(80, 10, 250, -20, 0, 0)); 
+      group.add(createPlate(80, 10, 250, 20, 10, 0)); 
     }
   },
   esquina: {
@@ -134,8 +134,8 @@ const jointData = {
       }
     ],
     build: (group) => {
-      group.add(createPlate(100, 10, 250, 0, 0, 0));
-      group.add(createPlate(10, 100, 250, 45, -55, 0));
+      group.add(createPlate(80, 10, 250, 0, 0, 0));
+      group.add(createPlate(10, 80, 250, 45, -45, 0));
     }
   },
   canto: {
@@ -159,8 +159,8 @@ const jointData = {
       }
     ],
     build: (group) => {
-      group.add(createPlate(15, 100, 250, -8, 0, 0));
-      group.add(createPlate(15, 100, 250, 8, 0, 0));
+      group.add(createPlate(10, 80, 250, -5.1, 0, 0));
+      group.add(createPlate(10, 80, 250, 5.1, 0, 0));
     }
   }
 };
