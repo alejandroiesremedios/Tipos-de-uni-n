@@ -497,6 +497,119 @@ function finishExam() {
   panel.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
 
+// =============================================
+// GENERADOR DE PDF (jsPDF - Estilo Institucional)
+// =============================================
+function generarPDF(pdfFilename) {
+  const jsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+  if (!jsPDF) throw new Error('jsPDF no cargado');
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+
+  const PW = 210, PH = 297, M = 20, CW = PW - 2 * M;
+  let y = M;
+
+  const C = {
+    blueDark:   [30, 58, 138],
+    blueLight:  [219, 234, 254],
+    textDark:   [15, 23, 42],
+    textMid:    [71, 85, 105],
+    grayBorder: [203, 213, 225],
+    greenBg:    [212, 237, 218],
+    greenText:  [21, 87, 36],
+    redBg:      [248, 215, 218],
+    redText:    [114, 28, 36]
+  };
+
+  const v = (id) => {
+    const el = document.getElementById(id);
+    return (el && el.value) ? el.value : '---';
+  };
+
+  // CABECERA
+  doc.setFillColor(...C.blueDark);
+  doc.rect(M, y, CW, 20, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('EJERCICIOS Y ACTIVIDADES INTERACTIVAS', PW / 2, y + 10, { align: 'center' });
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Reporte de Evaluación - Tipos de Unión 3D', PW / 2, y + 16, { align: 'center' });
+  y += 30;
+
+  // DATOS DEL ALUMNO
+  doc.setTextColor(...C.textDark);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('DATOS DEL ALUMNO', M, y);
+  y += 10;
+  
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  const studentData = [
+    ['Alumno/a:', v('studentName')],
+    ['Curso:', v('studentCourse')],
+    ['Módulo:', v('studentModule')],
+    ['Fecha:', v('examDate')]
+  ];
+  
+  studentData.forEach(row => {
+    doc.setFont('helvetica', 'bold');
+    doc.text(row[0], M, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(row[1], M + 45, y);
+    y += 7;
+  });
+  y += 15;
+
+  // RESULTADO
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('RESULTADO DE LA PRUEBA', M, y);
+  y += 8;
+
+  const notaNum = score;
+  const aprobado = notaNum >= 5;
+  const scoreBg = aprobado ? C.greenBg : C.redBg;
+  const scoreFg = aprobado ? C.greenText : C.redText;
+  const scoreMsg = aprobado ? "APTO" : "NECESITA MEJORAR";
+
+  doc.setFillColor(...scoreBg);
+  doc.roundedRect(M, y, CW, 30, 3, 3, 'F');
+  doc.setDrawColor(...scoreFg);
+  doc.roundedRect(M, y, CW, 30, 3, 3, 'S');
+  
+  doc.setTextColor(...scoreFg);
+  doc.setFontSize(35);
+  doc.setFont('helvetica', 'bold');
+  doc.text(score.toString() + " / 10", PW / 2, y + 18, { align: 'center' });
+  doc.setFontSize(12);
+  doc.text(scoreMsg, PW / 2, y + 26, { align: 'center' });
+  y += 45;
+
+  // PIE DE PÁGINA
+  doc.setDrawColor(...C.grayBorder);
+  doc.line(M, PH - 25, PW - M, PH - 25);
+  doc.setTextColor(...C.textMid);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.text('ID Ejercicio: 3D-TIPOS-UNION', M, PH - 20);
+  doc.text('Documento generado automáticamente por el sistema de evaluación interactiva.', M, PH - 16);
+  doc.text('Página 1 de 1', PW - M - 20, PH - 20);
+
+  // Generar Base64
+  const ab = doc.output('arraybuffer');
+  const uint8 = new Uint8Array(ab);
+  let binary = '';
+  for (let i = 0; i < uint8.length; i += 8192) {
+    binary += String.fromCharCode.apply(null, uint8.subarray(i, i + 8192));
+  }
+  return { 
+    blob: new Blob([uint8], { type: 'application/pdf' }), 
+    base64: btoa(binary) 
+  };
+}
+
 // ==========================================
 // ENVÍO AL EXCEL (GOOGLE APPS SCRIPT)
 // ==========================================
@@ -504,39 +617,61 @@ document.getElementById('btnEnviarDrive').addEventListener('click', async () => 
   const btn = document.getElementById('btnEnviarDrive');
   const status = document.getElementById('enviarDriveStatus');
   
-  const nombreFinal = document.getElementById('studentName').value + ' - ' + document.getElementById('studentCourse').value + ' (' + document.getElementById('studentModule').value + ')';
-  const payload = {
-    fecha: document.getElementById('examDate').value,
-    nombre: nombreFinal,
-    ejercicio: "3D: Tipos de Unión",
-    nota: score.toString()
-  };
-
   btn.disabled = true;
-  btn.textContent = 'Enviando...';
+  btn.textContent = 'Preparando...';
   status.style.display = 'block';
   status.style.color = '#475569';
-  status.textContent = 'Conectando con Google Drive...';
+  status.textContent = '⏳ Generando reporte PDF...';
 
   // Congelar formulario completo visualmente (Regla anti-trampas Sites)
   document.querySelector('.app-container').style.pointerEvents = 'none';
   document.querySelector('.app-container').style.opacity = '0.8';
-  document.getElementById('evaluationPanel').style.pointerEvents = 'auto'; // desproteger esto para ver
+  document.getElementById('evaluationPanel').style.pointerEvents = 'auto'; 
 
   try {
-    // Petición no-cors al Apps Script configurado como "Cualquier Usuario"
+    const nombreLimpio = document.getElementById('studentName').value.trim().replace(/\s+/g, '_');
+    const pdfFilename = `Union3D_${nombreLimpio}.pdf`;
+    
+    // 1. GENERAR PDF
+    const pdfResult = generarPDF(pdfFilename);
+    const pdfBase64 = pdfResult.base64;
+    const pdfBlob = pdfResult.blob;
+
+    // 2. PREPARAR PAYLOAD
+    const nombreFinal = document.getElementById('studentName').value + ' - ' + document.getElementById('studentCourse').value + ' (' + document.getElementById('studentModule').value + ')';
+    const payload = {
+      fecha: document.getElementById('examDate').value,
+      nombre: nombreFinal,
+      ejercicio: "3D: Tipos de Unión",
+      nota: score.toString(),
+      pdfNombre: pdfFilename,
+      pdf: pdfBase64
+    };
+
+    status.textContent = '🚀 Enviando a Google Drive...';
+    btn.textContent = 'Enviando...';
+
+    // 3. PETICIÓN AL SCRIPT
     await fetch(GAS_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
     
+    // 4. DESCARGA LOCAL (Opcional pero recomendado)
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = pdfFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
     btn.textContent = '¡Enviado!';
     status.style.color = '#16a34a';
-    status.textContent = '✅ Puntos guardados en el historial.';
+    status.textContent = '✅ Puntos y PDF guardados correctamente.';
   } catch (err) {
     console.error("Error", err);
     btn.disabled = false;
