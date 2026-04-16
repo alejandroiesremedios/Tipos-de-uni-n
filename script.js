@@ -1,5 +1,5 @@
-// CONFIGURACIONES GLOBALES
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxdSLiKANAcFmqFAwqYjppl0O5VBtmMuczwO_RUEoRnoXVEn9MRkUWpc32L5ooT7eGZ/exec"; 
+// CONFIGURACIONES GLOBALES (Versatilidad 2.0)
+const GAS_URL = "https://script.google.com/a/macros/iesremedios.es/s/AKfycbxkAcI4NpM1m1rH9YUhNUHUNmt5x9WhPN7q51WeAecqGG4-QkY6_isCqROfoWQjbo3E/exec"; 
 
 // Materiales 3D (Textura metálica mejorada con corrección de profundidad para las líneas)
 const metalMat = new THREE.MeshStandardMaterial({ 
@@ -638,6 +638,7 @@ document.getElementById('btnEnviarDrive').addEventListener('click', async () => 
         nombre: document.getElementById('studentName').value,
         ejercicio: "UNION3D - Tipos de Unión",
         nota: document.getElementById('scoreCircle').textContent,
+        tipo: "UNION3D", // Identificador de carpeta para el Drive
         pdfNombre: pdfFilename,
         pdf: pdfResult.base64
       })
