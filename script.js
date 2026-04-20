@@ -591,15 +591,13 @@ function generarPDF(pdfFilename) {
   doc.setFontSize(7);
   doc.text('Documento generado automáticamente por el Sistema Interactivo de Evaluación.', PW / 2, PH - 10, { align: 'center' });
 
-  const ab = doc.output('arraybuffer');
-  const uint8 = new Uint8Array(ab);
-  let binary = '';
-  for (let i = 0; i < uint8.length; i += 8192) {
-    binary += String.fromCharCode.apply(null, uint8.subarray(i, i + 8192));
-  }
+  const blob = doc.output('blob');
+  const dataUri = doc.output('datauristring');
+  const base64 = dataUri.split('base64,')[1];
+  
   return { 
-    blob: new Blob([uint8], { type: 'application/pdf' }), 
-    base64: btoa(binary) 
+    blob: blob, 
+    base64: base64 
   };
 }
 
