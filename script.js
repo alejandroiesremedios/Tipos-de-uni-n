@@ -634,7 +634,8 @@ document.getElementById('btnEnviarDrive').addEventListener('click', async () => 
       body: JSON.stringify({
         fecha: document.getElementById('examDate').value,
         nombre: document.getElementById('studentName').value,
-        ejercicio: "SAP - Union3D", // Al empezar por SAP, la API lo guarda en la carpeta SAP del Drive
+        ejercicio: "SAP - Union3D", // Nombre que sale en la hoja de Excel
+        tipo: "Tipos de Unión", // Nombre explícito para la carpeta en Google Drive
         nota: document.getElementById('scoreCircle').textContent,
         pdfNombre: pdfFilename,
         pdf: pdfResult.base64
