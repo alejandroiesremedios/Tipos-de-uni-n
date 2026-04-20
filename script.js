@@ -1,5 +1,5 @@
 // CONFIGURACIONES GLOBALES (Versatilidad 2.0)
-const GAS_URL = "https://script.google.com/a/macros/iesremedios.es/s/AKfycbxkAcI4NpM1m1rH9YUhNUHUNmt5x9WhPN7q51WeAecqGG4-QkY6_isCqROfoWQjbo3E/exec"; 
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzDJni77NAjWJng-ogPCMhr3QEHKKkgi7I2Vvegqamwb1udpgGeCamGO9bjuNrY4sE4/exec";
 
 // Materiales 3D (Textura metálica mejorada con corrección de profundidad para las líneas)
 const metalMat = new THREE.MeshStandardMaterial({ 
@@ -628,7 +628,7 @@ document.getElementById('btnEnviarDrive').addEventListener('click', async () => 
     // 1. GENERAR PDF
     const pdfResult = generarPDF(pdfFilename);
 
-    // 2. ENVIAR A GOOGLE DRIVE
+    // 2. ENVIAR A GOOGLE DRIVE (Siguiendo el estándar de oro de WPS)
     await fetch(GAS_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -636,9 +636,8 @@ document.getElementById('btnEnviarDrive').addEventListener('click', async () => 
       body: JSON.stringify({
         fecha: document.getElementById('examDate').value,
         nombre: document.getElementById('studentName').value,
-        ejercicio: "UNION3D - Tipos de Unión",
+        ejercicio: "SAP - Union3D", // Al empezar por SAP, la API lo guarda en la carpeta SAP del Drive
         nota: document.getElementById('scoreCircle').textContent,
-        tipo: "UNION3D", // Identificador de carpeta para el Drive
         pdfNombre: pdfFilename,
         pdf: pdfResult.base64
       })
