@@ -1,5 +1,5 @@
 // CONFIGURACIONES GLOBALES (Versatilidad 2.0)
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzDJni77NAjWJng-ogPCMhr3QEHKKkgi7I2Vvegqamwb1udpgGeCamGO9bjuNrY4sE4/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxrjVvPkjC83NB1krzh_F8oeGk_JQNZJFtlY9-ycBZTN0aUFZXKJcbPEsgx9RWv0j7W/exec";
 
 const metalMat = new THREE.MeshStandardMaterial({
   color: 0xc0ced8,       // acero pulido — gris azulado frío
@@ -339,8 +339,8 @@ class App3D {
   constructor(canvasId) {
     this.container = document.getElementById(canvasId);
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, this.container.clientWidth / this.container.clientHeight, 1, 1000);
-      this.camera.position.set(130, 85, 255);
+    this.camera = new THREE.PerspectiveCamera(38, this.container.clientWidth / this.container.clientHeight, 1, 3000);
+    this.camera.position.set(220, 140, 420);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
@@ -468,7 +468,7 @@ class App3D {
     }
     if (jointData[type]) {
       jointData[type].build(this.modelGroup);
-      this.camera.position.set(130, 85, 255);
+      this.camera.position.set(220, 140, 420);
       this.camera.up.set(0, 1, 0);      // restaurar orientación al cambiar de unión
       this.controls.target.set(0, 0, 0);
       this.controls.autoRotate = true;   // C — reiniciar rotación al cambiar modelo
