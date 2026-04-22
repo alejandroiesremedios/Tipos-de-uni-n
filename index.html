@@ -55,7 +55,13 @@
             <button class="nav-btn" data-type="canto">Unión de Canto (Edge joint)</button>
           </div>
           <div class="viewer-card">
-            <div id="studyCanvas" class="canvas-container"></div>
+            <div id="studyCanvas" class="canvas-container">
+              <div class="view-controls">
+                <button class="view-btn" onclick="setView('perspective')">Perspectiva</button>
+                <button class="view-btn" onclick="setView('top')">Planta</button>
+                <button class="view-btn" onclick="setView('front')">Alzado</button>
+              </div>
+            </div>
             <div id="studyInfo" class="info-box">
               <h3 id="infoTitle">Unión a Tope</h3>
               <p id="infoDesc">Piezas situadas en el mismo plano. Es la unión más común y suele requerir preparación de bordes (chaflanes) en espesores medios/altos.</p>
