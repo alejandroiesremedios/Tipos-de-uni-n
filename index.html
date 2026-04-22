@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tipos de Unión en Soldadura 3D - EJERCICIOS Y ACTIVIDADES INTERACTIVAS</title>
+  <title>Tipos de Unión 3D | Formación Técnica Interactiva</title>
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
   <!-- Librerías 3D -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
-<body>
+<body style="font-family: 'Outfit', sans-serif;">
   <div class="app-container">
     <header class="header">
       <div class="title-container">
-        <h1>EJERCICIOS Y ACTIVIDADES INTERACTIVAS</h1>
-        <p>Identificación de Tipos de Unión en Soldadura (3D)</p>
+        <h1>TIPOS DE UNIÓN (ISO 17659)</h1>
+        <p>Identificación de Geometrías en Soldadura 3D</p>
       </div>
     </header>
 
@@ -54,18 +54,21 @@
             <button class="nav-btn" data-type="esquina">Unión en Esquina (Corner joint)</button>
             <button class="nav-btn" data-type="canto">Unión de Canto (Edge joint)</button>
           </div>
-          <div class="study-viewer">
+          <div class="viewer-card">
             <div id="studyCanvas" class="canvas-container"></div>
             <div id="studyInfo" class="info-box">
               <h3 id="infoTitle">Unión a Tope</h3>
               <p id="infoDesc">Piezas situadas en el mismo plano. Es la unión más común y suele requerir preparación de bordes (chaflanes) en espesores medios/altos.</p>
-              <p id="infoTheory" style="margin-top: 1rem; font-size: 0.95rem; border-top: 1px solid var(--border); padding-top: 1rem;"></p>
+              <div id="infoTheory"></div>
             </div>
           </div>
         </div>
 
         <div class="start-exam-container">
-          <p class="warning-text">⚠️ Una vez comiences la prueba, la teoría desaparecerá y tendrás un tiempo máximo de 20 segundos por cada pregunta.</p>
+          <div class="instructions-box">
+            <p>Estudia los diferentes tipos de unión pulsando en cada uno de ellos, cuando creas que ya sabes lo suficiente de los tipos de unión y reconozcas cada una de ellas puedes pasar a realizar la prueba que lo demuestre.</p>
+            <p style="margin-top: 1rem;">Al hacer click en comenzar la prueba tendrás unos segundos por pregunta para responder, asegúrate de que tienes conocimientos suficientes sobre las <b>uniones</b>, una vez realizada la actividad se generará un PDF con tu resultado.</p>
+          </div>
           <button id="btnStartExam" class="btn-primary">Comenzar Prueba</button>
         </div>
       </section>
@@ -85,7 +88,7 @@
         </div>
 
         <div class="exam-grid">
-          <div class="exam-viewer">
+          <div class="viewer-card">
             <div id="examCanvas" class="canvas-container"></div>
           </div>
           
