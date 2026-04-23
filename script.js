@@ -145,9 +145,8 @@ const jointData = {
         options: ["Biselado previo en la pieza vertical para asegurar penetración total", "Soldadura por puntos espaciados uniformemente", "Reducción del espesor de garganta al mínimo", "Uso de adhesivos epóxicos entre las placas"],
         correct: "Biselado previo en la pieza vertical para asegurar penetración total"
       },
-      {
         text: "¿Por qué es peligrosa una transición brusca del cordón con el metal base en el pie de la soldadura (Toe)?",
-        options: ["Actúa como concentrador de tensiones e inicia grietas por fatiga", "Reduce el espesor de garganta disponible", "Impide el enfriamiento homogéneo del cordón", "Aumenta la zona afectada térmicamente"],
+        options: ["Actúa como concentrador de tensiones e inicia grietas por fatiga", "Reduce el espesor de garganta útil disponible en la unión", "Impide el enfriamiento homogéneo del cordón de soldadura", "Aumenta la zona afectada térmicamente de forma global"],
         correct: "Actúa como concentrador de tensiones e inicia grietas por fatiga"
       }
     ],
@@ -170,7 +169,7 @@ const jointData = {
     questions: [
       {
         text: "¿Cuál es el principal inconveniente estructural de la unión a solape?",
-        options: ["La excentricidad de la carga genera momentos flectores indeseados", "La dificultad de acceso para el proceso GMAW", "La necesidad de mecanizado previo de las caras", "El excesivo tiempo de enfriamiento natural"],
+        options: ["La excentricidad de la carga genera momentos flectores indeseados", "La dificultad operativa de acceso para el proceso GMAW", "La necesidad de mecanizado de precisión de las caras", "El excesivo tiempo acumulado de enfriamiento natural"],
         correct: "La excentricidad de la carga genera momentos flectores indeseados"
       },
       {
@@ -200,7 +199,7 @@ const jointData = {
       },
       {
         text: "¿Cuál es la principal ventaja dimensional de la unión a solape?",
-        options: ["Tolerancia dimensional alta; no requiere preparación de bordes compleja", "Resistencia a tracción superior a la unión a tope", "Permite mayor penetración en la raíz", "Elimina todos los esfuerzos de flexión"],
+        options: ["Tolerancia dimensional alta; no requiere preparación de bordes compleja", "Resistencia a tracción superior a la obtenida en la unión a tope", "Permite mayor penetración en la zona de la raíz de la junta", "Elimina por completo todos los esfuerzos de flexión lateral"],
         correct: "Tolerancia dimensional alta; no requiere preparación de bordes compleja"
       },
       {
@@ -234,7 +233,7 @@ const jointData = {
       },
       {
         text: "¿Qué ventaja tiene la 'esquina abierta' frente a la 'esquina cerrada'?",
-        options: ["Facilita la penetración de raíz al permitir el acceso del arco al vértice interno", "Proporciona un acabado estético liso tras el esmerilado", "Reduce el volumen de material de aportación", "Evita el uso de gas de protección"],
+        options: ["Facilita la penetración de raíz al permitir el acceso del arco al vértice interno", "Proporciona un acabado estético liso tras el proceso de esmerilado", "Reduce el volumen total de material de aportación necesario", "Evita la necesidad de utilizar gas de protección externa"],
         correct: "Facilita la penetración de raíz al permitir el acceso del arco al vértice interno"
       },
       {
@@ -299,9 +298,8 @@ const jointData = {
         options: ["En la base del cordón de soldadura", "En la zona central del metal fundido", "En la cara exterior visible del cordón", "En el centro de la zona afectada térmicamente"],
         correct: "En la base del cordón de soldadura"
       },
-      {
         text: "Según AWS A3.0, ¿qué diferencia a la soldadura de canto (Edge Weld) de una soldadura a tope?",
-        options: ["En la Edge Weld se funden bordes de placas paralelas; en la tope, las placas son colineales", "No hay diferencia, son sinónimos exactos", "La Edge Weld solo se aplica bajo condiciones submarinas", "La soldadura a tope no requiere preparación de bordes"],
+        options: ["En la Edge Weld se funden bordes de placas paralelas; en la tope, las placas son colineales", "No existe ninguna diferencia técnica real, son sinónimos exactos", "La Edge Weld solo se aplica bajo condiciones submarinas extremas", "La soldadura a tope no requiere ningún tipo de preparación de bordes"],
         correct: "En la Edge Weld se funden bordes de placas paralelas; en la tope, las placas son colineales"
       },
       {
@@ -316,7 +314,7 @@ const jointData = {
       },
       {
         text: "¿Cuál es la limitación estructural más importante de una unión de canto?",
-        options: ["No puede soportar esfuerzos de flexión o impacto considerables", "Es imposible de mecanizar tras la soldadura", "No admite el proceso GMAW (MIG/MAG)", "Requiere precalentamiento superior a 500°C"],
+        options: ["No puede soportar esfuerzos de flexión o impacto considerables", "Es imposible de mecanizar tras realizar la soldadura final", "No admite el proceso industrial GMAW (MIG/MAG) estándar", "Requiere precalentamiento superior a los quinientos grados"],
         correct: "No puede soportar esfuerzos de flexión o impacto considerables"
       },
       {
@@ -955,7 +953,7 @@ document.getElementById('btnEnviarDrive').addEventListener('click', async () => 
       body: JSON.stringify({
         fecha: document.getElementById('examDate').value,
         nombre: document.getElementById('studentName').value,
-        ejercicio: "SAP - Union3D",
+        ejercicio: "Tipos de Unión",
         modulo: "SAP",
         tipo: "Tipos de Unión",
         nota: document.getElementById('scoreCircle').textContent,
