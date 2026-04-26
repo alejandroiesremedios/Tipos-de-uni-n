@@ -145,6 +145,7 @@ const jointData = {
         options: ["Biselado previo en la pieza vertical para asegurar penetración total", "Soldadura por puntos espaciados uniformemente", "Reducción del espesor de garganta al mínimo", "Uso de adhesivos epóxicos entre las placas"],
         correct: "Biselado previo en la pieza vertical para asegurar penetración total"
       },
+      {
         text: "¿Por qué es peligrosa una transición brusca del cordón con el metal base en el pie de la soldadura (Toe)?",
         options: ["Actúa como concentrador de tensiones e inicia grietas por fatiga", "Reduce el espesor de garganta útil disponible en la unión", "Impide el enfriamiento homogéneo del cordón de soldadura", "Aumenta la zona afectada térmicamente de forma global"],
         correct: "Actúa como concentrador de tensiones e inicia grietas por fatiga"
@@ -298,6 +299,7 @@ const jointData = {
         options: ["En la base del cordón de soldadura", "En la zona central del metal fundido", "En la cara exterior visible del cordón", "En el centro de la zona afectada térmicamente"],
         correct: "En la base del cordón de soldadura"
       },
+      {
         text: "Según AWS A3.0, ¿qué diferencia a la soldadura de canto (Edge Weld) de una soldadura a tope?",
         options: ["En la Edge Weld se funden bordes de placas paralelas; en la tope, las placas son colineales", "No existe ninguna diferencia técnica real, son sinónimos exactos", "La Edge Weld solo se aplica bajo condiciones submarinas extremas", "La soldadura a tope no requiere ningún tipo de preparación de bordes"],
         correct: "En la Edge Weld se funden bordes de placas paralelas; en la tope, las placas son colineales"
@@ -954,11 +956,12 @@ document.getElementById('btnEnviarDrive').addEventListener('click', async () => 
         fecha: document.getElementById('examDate').value,
         nombre: document.getElementById('studentName').value,
         ejercicio: "Tipos de Unión",
-        modulo: "SAP",
+        modulo: document.getElementById('studentModule').value,
         tipo: "Tipos de Unión",
         nota: document.getElementById('scoreCircle').textContent,
         pdfNombre: pdfFilename,
-        pdf: pdfResult.base64
+        pdf: pdfResult.base64,
+        hojaTarget: "EJERCICIOS Y ACTIVIDADES INTERACTIVAS"
       })
     });
 
